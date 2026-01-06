@@ -1,0 +1,99 @@
+
+### React.JS
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+/.next
+/out
+
+# misc
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Optional: vercel / netlify
+.vercel
+.netlify
+
+
+### Spring Boot
+
+### Java ###
+*.class
+*.war
+*.ear
+*.jar
+*.log
+
+### Spring Boot ###
+/target/
+/build/
+/out/
+
+### Gradle ###
+.gradle
+/build/
+/!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+### Maven ###
+.mvn/
+!**/src/main/**/maven-wrapper.jar
+!**/src/test/**/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+
+### VS Code ###
+.vscode/
+
+### OS-specific ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/
+*.out
+
+### Environment ###
+.env
+application-*.yml
+application-*.yaml
+application-*.properties
+
+### Others ###
+/tmp/
+/*.swp
