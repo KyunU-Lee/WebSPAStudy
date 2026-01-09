@@ -1,0 +1,125 @@
+.chat-window-container {
+    display: flex;
+    flex : 1;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fff;
+    position: relative;
+}
+
+.chat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    margin: 0;
+}
+
+.message-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+}
+
+.message-bubble {
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 10px 15px;    
+    border-radius: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.message-bubble.user {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message-bubble.ai {
+    align-self: flex-start;
+    background-color: #f1f1f2;
+    color: #333;
+    border-bottom-left-radius: 2px;
+}
+
+.message-bubble.typing {
+    display: flex;
+    gap:4px;
+    padding: 12px 18px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #999;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) {animation-delay: -0.32s;}
+.dot:nth-child(2) {animation-delay: -0.16s;}
+
+.input-area {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: 150;
+    overflow-y: auto;
+}
+
+.chat-input:focus {
+    border-color: #007bff;
+}
+
+.send-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.send-btn:hover {
+    background-color: #0056b3;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.chat-input-textarea {
+  flex: 1;
+  padding: 15px;      /* 💡 안쪽 여백을 늘려 더 크게 보이게 함 */
+  min-height: 25px;   /* 💡 초기 최소 높이를 명시적으로 지정 */
+  max-height: 200px;  /* 💡 최대 높이도 조금 더 여유 있게 상향 */
+  
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 15px;    /* 💡 글자 크기도 조금 키우면 보기 편해요 */
+  line-height: 1.6;   /* 💡 줄 간격을 넓히면 가독성이 좋아집니다 */
+  overflow-y: auto;
+  transition: border-color 0.2s;
+}
