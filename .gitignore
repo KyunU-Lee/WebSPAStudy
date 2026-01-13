@@ -97,3 +97,48 @@ application-*.properties
 ### Others ###
 /tmp/
 /*.swp
+
+
+# Python 가상환경
+venv/
+.venv/
+env/
+bin/
+lib/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# Python 캐시 (컴파일된 파일)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 환경 변수 및 설정 파일 (민감 정보 포함)
+.env
+.flaskenv
+*.secret
+secrets.py
+
+# IDE 설정 (VS Code, PyCharm 등)
+.vscode/
+.idea/
+.project
+.pydevproject
+
+# 테스트 및 로그
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# 데이터베이스 (SQLite 사용 시)
+*.sqlite3
+*.db
