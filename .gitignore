@@ -126,6 +126,7 @@ __pycache__/
 .flaskenv
 *.secret
 secrets.py
+private_data/
 
 # IDE 설정 (VS Code, PyCharm 등)
 .vscode/
