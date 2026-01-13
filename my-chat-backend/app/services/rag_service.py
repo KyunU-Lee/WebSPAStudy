@@ -76,19 +76,22 @@ class RAGService:
         )
         return "학습 완료"
 
-    async def get_rag_response(self, question: str):
+    async def get_rag_response_stream(self, question: str):
         """질문에 대해 내규를 검색하고 답변을 생성합니다."""
         if not self.vector_store:
-            return "먼저 문서를 학습시켜주세요."
+            yield "먼저 문서를 학습시켜주세요."
 
         # 1. 프롬프트 설정 (페르소나 부여)
         system_prompt = (
-            "너는 회사의 인사/법무 규정 전문가야. 다음 [내규 문맥]을 바탕으로 답변해줘.\n"
+            "당신은 규정 전문가입니다. 아래 제공된 [문맥]을 바탕으로 답변하십시오.\n"
+            "반드시 답변 끝에 '참조 문서' 섹션을 만들어 사용한 문서의 이름과 페이지를 명시하세요.\n\n"
+            "### 답변 규칙:\n"
             "1. 질문과 관련된 조항(예: 제10조)이 문맥에 조금이라도 언급된다면 그 내용을 바탕으로 상세히 설명해.\n"
             "2. 여러 문서에 내용이 흩어져 있다면 이를 종합해서 대답해.\n"
             "3. 문서 번호나 조항 제목(【 】)이 보이면 반드시 언급해줘.\n"
             "4. 만약 정말로 내용이 없다면, 관련된 유사한 조항이라도 찾아서 안내해줘.\n\n"
-            "[내규 문맥]\n{context}"
+            "5. 답변 본문에서도 가능하면 '[문서명, p.00]' 형태로 출처를 언급하세요.\n"
+            "[문맥]\n{context}"
         )
         
         prompt = ChatPromptTemplate.from_messages([
