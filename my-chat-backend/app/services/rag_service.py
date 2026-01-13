@@ -105,5 +105,9 @@ class RAGService:
         rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
         # 3. 답변 생성
-        response = await rag_chain.ainvoke({"input": question})
-        return response["answer"]
+        # response = await rag_chain.ainvoke({"input": question})
+        async for chunk in rag_chain.astream({"input": question}):
+            if "answer" in chunk:
+                yield chunk['answer']
+
+        # return response["answer"]

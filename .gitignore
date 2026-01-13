@@ -143,3 +143,4 @@ htmlcov/
 # 데이터베이스 (SQLite 사용 시)
 *.sqlite3
 *.db
+chroma_db/
