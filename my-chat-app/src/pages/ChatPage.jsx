@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import Sidebar from "../components/sideBar";
 import ChatWindow from "../components/chatWindow";
 
@@ -13,7 +13,8 @@ import ChatWindow from "../components/chatWindow";
 function ChatPage() {
     const [selectedId, setSelectedId] = useState(1);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [isTyping, setIsTyping] = useState(false);
+    //const [isTyping, setIsTyping] = useState(false);
+    const socket = useRef(null);
 
     const [chatList, setChatList] =useState([
     {id : 1, title:"React 기초 문법"},
@@ -25,6 +26,10 @@ function ChatPage() {
         2 : [{id: 1, text: '2번 채팅방에 오신 걸 환영합니다.', isUser: false},]
     })
 
+    const selectedIdRef = useRef(selectedId);
+    useEffect(() => {
+        selectedIdRef.current = selectedId;
+    }, [selectedId])
 
     const CreateNewChat = () => {
         const newId = Date.now();
@@ -62,24 +67,69 @@ function ChatPage() {
         }));
 
         if (newMessage.isUser) {
-            setIsTyping(true);
-
-            setTimeout(() => {
-                const aiResponse = {
-                id: Date.now() + 1, // ID 중복 방지
-                text: `"${newMessage.text}"라고 말씀하셨군요! 더 궁금한 게 있으신가요?`,
-                isUser: false, // AI 메시지
-                };
-
-                // 다시 setAllMessages를 호출하여 AI 메시지 추가
-                setAllMessages((prev) => ({
-                ...prev,
-                [chatId]: [...(prev[chatId] || []), aiResponse],
-                }));
-                setIsTyping(false);
-            }, 1500); // 1000ms = 1초
-        };
+            if (socket.current) {
+                console.log(`Send Data : ${newMessage.text}`)
+                socket.current.send(newMessage.text);
+            }
+        }
     };
+
+    useEffect(() => {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws`.trim();
+        socket.current = new WebSocket(wsUrl);
+
+        socket.current.onopen = () => {
+            console.log('Nginx를 통해 FASTAPI에 연결되었습니다.');
+        };
+            
+        socket.current.onmessage = (event) => {
+            const serverChunk = event.data;
+            const currentId = selectedIdRef.current; // 현재 채팅방 ID
+
+            setAllMessages((prev) => {
+                // 1. 현재 대화방의 기존 메시지 리스트 가져오기
+                const currentChatMessages = prev[currentId] || [];
+                
+                // 2. 마지막 메시지가 AI 메시지인지 확인
+                const lastMsg = currentChatMessages[currentChatMessages.length - 1];
+
+                if (lastMsg && !lastMsg.isUser) {
+                    // 마지막 메시지가 AI라면: 기존 텍스트에 새로운 조각(chunk) 추가
+                    const updatedLastMsg = { 
+                        ...lastMsg, 
+                        text: lastMsg.text + serverChunk 
+                    };
+                    return {
+                        ...prev,
+                        [currentId]: [...currentChatMessages.slice(0, -1), updatedLastMsg]
+                    };
+                } else {
+                    // 마지막 메시지가 유저이거나 메시지가 없다면: 새로운 AI 메시지 객체 생성
+                    const newAiMsg = {
+                        id: Date.now(),
+                        text: serverChunk,
+                        isUser: false
+                    };
+                    return {
+                        ...prev,
+                        [currentId]: [...currentChatMessages, newAiMsg]
+                    };
+                }
+            });
+        };
+
+        socket.current.onclose = () => {
+            console.log('연결이 종료되었습니다.');
+        };
+
+        return () => {
+            socket.current.close();
+        };
+
+    },[]);
+
+
 
     return (
         <div style={styleOutter}>
@@ -96,7 +146,7 @@ function ChatPage() {
                 selectedId={selectedId}
                 messages={allMessages[selectedId] || []}
                 onSendMessage={addMessage}
-                isTyping={isTyping}
+                //isTyping={isTyping}
 
             />
         </div>
